@@ -1,6 +1,8 @@
 from cProfile import label
+from ssl import ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE
 from turtle import color
 import perceptron as pc
+import AdalineGD as nAdal
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -57,4 +59,39 @@ plot_decision_regions(X,y,classifier=ppn,resolution=0.02)
 plt.xlabel('Dl dzialki[cm]')
 plt.ylabel('Dl platka[cm]')
 plt.legend(loc='upper left')
+plt.show()
+
+#------------------------------------------------------------------------
+#ADALINE starts here
+
+fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(8,4))
+adal = nAdal.AdalineGD(n_iter=10, eta=0.01).fit(X,y)
+ax[0].plot(range(1,len(adal.cost_)+1), np.log10(adal.cost_), marker='o')
+ax[0].set_xlabel('Epoki')
+ax[0].set_ylabel('Log (suma kwadratow bledow)')
+ax[0].set_title('Adaline - wspolczynnik uczenia 0.01')
+ada2 = nAdal.AdalineGD(n_iter=10, eta=0.0001).fit(X,y)
+ax[1].plot(range(1,len(ada2.cost_)+1), ada2.cost_, marker='o')
+ax[1].set_xlabel('Epoki')
+ax[1].set_ylabel('suma kwadratow bledow')
+ax[1].set_title('Adaline - wspolczynnik uczenia 0.0001')
+plt.show()
+
+#input standarisation
+X_std=np.copy(X)
+X_std[:,0]=(X[:,0]-X[:,0].mean()) / X[:,0].std()
+X_std[:,1]=(X[:,1]-X[:,1].mean()) / X[:,1].std()
+
+
+ada = nAdal.AdalineGD(n_iter=15, eta=0.01).fit(X_std,y)
+plot_decision_regions(X_std,y,classifier=ada)
+plt.title("Adaline - Gradient prosty")
+plt.xlabel('Dlugosc dzialki [standaryzowana]')
+plt.ylabel('dlugosc platka std')
+plt.legend(loc='upper left')
+plt.show()
+
+plt.plot(range(1,len(ada.cost_)+1),ada.cost_,marker='o')
+plt.xlabel("Epoki")
+plt.ylabel("Suma kwadratow bledow")
 plt.show()
