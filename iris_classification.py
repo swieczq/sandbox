@@ -3,6 +3,7 @@ from ssl import ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE
 from turtle import color
 import perceptron as pc
 import AdalineGD as nAdal
+import adalineSGD as sgd
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -94,4 +95,19 @@ plt.show()
 plt.plot(range(1,len(ada.cost_)+1),ada.cost_,marker='o')
 plt.xlabel("Epoki")
 plt.ylabel("Suma kwadratow bledow")
+plt.show()
+
+#adalineSGD-------------------
+
+ada=sgd.AdalineSGD(n_iter=15, eta=0.01, random_state=1)
+ada.fit(X_std, y)
+plot_decision_regions(X_std, y, classifier=ada)
+plt.title('Adaline - stochastic gradient drop')
+plt.xlabel('Dlugosc dzialki [std]')
+plt.ylabel('Dlugosc platka [std]')
+plt.legend(loc='upper left')
+plt.show()
+plt.plot(range(1, len(ada.cost_)+1),ada.cost_,marker='o')
+plt.xlabel('Epoki')
+plt.ylabel('sredni koszt')
 plt.show()
